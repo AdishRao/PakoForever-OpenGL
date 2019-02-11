@@ -1,6 +1,14 @@
 #include <iostream>
+
+#ifdef __linux__
+#include <GL/glut.h>
+#endif
+
+#ifdef __apple__
 #include <OpenGL/gl.h>
-#include <GLUT/glut.h>
+#include <GLUT/glut.h> 
+#endif
+
 using namespace std;
 
 int change_x[2]={0}; // 0 = left , 1 = right
