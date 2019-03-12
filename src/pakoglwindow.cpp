@@ -14,11 +14,13 @@ void PakoGLWindow::keypressed(unsigned char key, int x, int y)
             break;
         case 'Q':
             viewer[0] --;
+            break;
         case 'r':
             viewer[1] ++; 
             break;
         case 'R':
             viewer[1] --;
+            break;
         case 'e':
             viewer[2] ++; 
             break;
@@ -67,7 +69,7 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
 void PakoGLWindow::initialize()
 {    
     glMatrixMode(GL_PROJECTION);
-    glOrtho(0.0,100.0,0.0,100.0,0.0,10.0);
+    glOrtho(0.0,100.0,0.0,100.0,-2.0,15.0);
     glClearColor(1.0,1.0,1.0,1.0);
     glMatrixMode(GL_MODELVIEW);
 }

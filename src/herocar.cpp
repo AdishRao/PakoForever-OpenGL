@@ -1,14 +1,29 @@
 #include "../include/herocar.h"
 
-void HeroCar::drawCar()
+void HeroCar::drawCar(int a,int b,int c,int d)
 {
-    glColor3f(1.0,0.0,0.0);
     glBegin(GL_POLYGON);
-        glVertex2iv(currentpos[0]); //Change all
-        glVertex2iv(currentpos[1]); //Change
-        glVertex2iv(currentpos[2]); //Change
-        glVertex2iv(currentpos[3]); //Change
+        glVertex3iv(currentpos[a]);
+        glVertex3iv(currentpos[b]);
+        glVertex3iv(currentpos[c]);
+        glVertex3iv(currentpos[d]);
     glEnd();
+}
+
+void HeroCar::drawCarCall()
+{
+    colorMeSilly(colors::RED);
+    drawCar(0,3,2,1);
+    colorMeSilly(colors::CYAN);
+    drawCar(2,3,7,6);
+    colorMeSilly(colors::CYAN);
+    drawCar(0,4,7,3);
+    colorMeSilly(colors::CYAN);
+    drawCar(1,2,6,5);
+    colorMeSilly(colors::YELLOW);
+    drawCar(4,5,6,7);
+    colorMeSilly(colors::CYAN);
+    drawCar(0,1,5,4);
 }
 
 void HeroCar::changeDirection(unsigned char key) { 
@@ -50,7 +65,9 @@ void HeroCar::moveForward()
             change_x-=0.01;
             break;
     }
-    glTranslatef(change_x,change_y,0);
-    drawCar();
+    //glTranslatef(change_x,change_y,0);
+    //glRotatef(15,0.0,1.0,0.0);
+    //glRotatef(15,0.0,0.0,1.0);
+    drawCarCall();
     glPopMatrix();
 }
