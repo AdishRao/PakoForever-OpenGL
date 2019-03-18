@@ -18,7 +18,7 @@ void HeroCar::drawCarCall()
     drawCar(2,3,7,6);
     colorMeSilly(colors::CYAN);
     drawCar(0,4,7,3);
-    colorMeSilly(colors::CYAN);
+    colorMeSilly(colors::WHITE);
     drawCar(1,2,6,5);
     colorMeSilly(colors::YELLOW);
     drawCar(4,5,6,7);
@@ -45,7 +45,7 @@ void HeroCar::changeDirection(unsigned char key) {
 
 void HeroCar::moveForward()
 {
-    glPushMatrix();
+    glPushMatrix(); 
     switch(currentdir)
     {
         // up
@@ -65,9 +65,41 @@ void HeroCar::moveForward()
             change_x-=0.01;
             break;
     }
-    //glTranslatef(change_x,change_y,0);
+    glTranslatef(change_x,change_y,0);
     //glRotatef(15,0.0,1.0,0.0);
     //glRotatef(15,0.0,0.0,1.0);
     drawCarCall();
     glPopMatrix();
+}
+
+void HeroCar::drawCop(int a,int b,int c,int d)
+{
+    glBegin(GL_POLYGON);
+        glVertex3iv(cop1pos[a]);
+        glVertex3iv(cop1pos[b]);
+        glVertex3iv(cop1pos[c]);
+        glVertex3iv(cop1pos[d]);
+    glEnd();
+    //std::cout<<"hello"<<std::endl;
+
+}
+
+void HeroCar::drawCopCall()
+{
+    //std::cout<<"hello"<<std::endl;
+    glPushMatrix();
+    glLoadIdentity();
+    colorMeSilly(colors::RED);
+    drawCop(0,3,2,1);
+    colorMeSilly(colors::RED);
+    drawCop(2,3,7,6);
+    colorMeSilly(colors::RED);
+    drawCop(0,4,7,3);
+    colorMeSilly(colors::RED);
+    drawCop(1,2,6,5);
+    colorMeSilly(colors::BLUE);
+    drawCop(4,5,6,7);
+    colorMeSilly(colors::RED);
+    drawCop(0,1,5,4);
+   glPopMatrix();
 }

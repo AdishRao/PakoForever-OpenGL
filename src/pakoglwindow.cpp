@@ -69,8 +69,10 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
 void PakoGLWindow::initialize()
 {    
     glMatrixMode(GL_PROJECTION);
-    glOrtho(0.0,100.0,0.0,100.0,-2.0,15.0);
-    glClearColor(1.0,1.0,1.0,1.0);
+    
+    glOrtho(0.0,200.0,0.0,200.0,-2.0,15.0);
+    
+   // glClearColor(1.0,1.0,1.0,0.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -78,11 +80,26 @@ void PakoGLWindow::initialize()
 void PakoGLWindow::display()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    //glClearColor(1.0,1.0,1.0,0.0);
+    //gluLookAt(viewer[0],viewer[1],viewer[2],0.0,0.0,0.0,0.0,1.0,0.0); 
     car.moveForward();
+    car.drawCopCall();
     // obstacleCount, radius, color
     drawObstacles(7,3, colors::PINK);
     glFlush();
     glutSwapBuffers();
+}
+
+void PakoGLWindow::myReshape(int w,int h)
+{
+    glViewport(0,0,w,h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    if(w<=h)
+        glFrustum(-2.0,2.0,-2.0*(GLfloat)h/(GLfloat)w,2.0*(GLfloat)h/(GLfloat)w,2.0,20.0);
+    else
+        glFrustum(-2.0*(GLfloat)w/(GLfloat)h,2.0*(GLfloat)w/(GLfloat)h,-2.0,2.0,2.0,20.0);
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void PakoGLWindow::idle() { 
