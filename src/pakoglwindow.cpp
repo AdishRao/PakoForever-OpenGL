@@ -2,7 +2,13 @@
 
 void PakoGLWindow::keypressed(unsigned char key, int x, int y)
 {
-    switch(key) { 
+    if (currentScreen==0) 
+    { 
+        currentScreen = 1;
+        return;
+    } 
+    switch(key) 
+    { 
         case 'w': 
         case 's': 
         case 'd': 
@@ -30,7 +36,8 @@ void PakoGLWindow::keypressed(unsigned char key, int x, int y)
     std::cout<<key<<std::endl;
 }
 
-void PakoGLWindow::specialKey(int key, int x, int y){ 
+void PakoGLWindow::specialKey(int key, int x, int y)
+{ 
     switch (key)
     {
         case GLUT_KEY_UP:
@@ -42,7 +49,8 @@ void PakoGLWindow::specialKey(int key, int x, int y){
 
 // Draws 9 sided polygons in random locations using translate
 // Polygon formula taken from  https://gist.github.com/kenpower/3782654 and modified because it drew one side less
-void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::colorNames color) {
+void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::colorNames color) 
+{
     // initialize random seed - otherwise random positions generated each time when display calls. 
     srand (33);
     // generates M sided polygon
@@ -50,13 +58,15 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
     // defining bounds for ortho
     const int xMin=0, xMax=100, yMin=0, yMax=100;
 
-    for (int i=0; i<obstacleCount; i++){
+    for (int i=0; i<obstacleCount; i++)
+    {
         // defining bounds used to limit centers of polygon 
         const int xCenter = rand() % xMax + xMin; 
         const int yCenter = rand() % yMax + yMin;
 
         glBegin(GL_POLYGON);
-        for(int i=0;i<=sides;i++){
+        for(int i=0;i<=sides;i++)
+        {
             double angle=i*2*M_PI/sides;
             colorMeSilly(color); // using instead of glColor
             glVertex2d(xCenter+radius*cos(angle),yCenter+radius*sin(angle));	
@@ -68,6 +78,7 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
 
 void PakoGLWindow::initialize()
 {    
+    currentScreen = 0;
     glMatrixMode(GL_PROJECTION);
     glOrtho(0.0,100.0,0.0,100.0,-2.0,15.0);
     glClearColor(1.0,1.0,1.0,1.0);
@@ -78,13 +89,30 @@ void PakoGLWindow::initialize()
 void PakoGLWindow::display()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-    car.moveForward();
-    // obstacleCount, radius, color
-    drawObstacles(7,3, colors::PINK);
+    switch (currentScreen) 
+    {
+        case 0:
+            startScreen();
+            break; 
+        case 1:
+            car.moveForward();
+            // obstacleCount, radius, color
+            drawObstacles(7,3, colors::PINK);
+    
+    }
     glFlush();
     glutSwapBuffers();
 }
 
-void PakoGLWindow::idle() { 
+void PakoGLWindow::idle()
+{ 
     glutPostRedisplay();
+}
+
+void PakoGLWindow::startScreen()
+{
+    glClearColor(0,0,0,0);
+    glText(45,50,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Pako Forever!");
+    glText(40,40,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to continue");
+    
 }
