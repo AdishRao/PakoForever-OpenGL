@@ -3,19 +3,17 @@
 int i = 0;
 float heromidx = 60;
 float heromidy = 60;
-//COP 1
-static int coppos_one[8][3] =  {{20,95,15},{20,105,15},{30,105,15},{30,95,15},{40,115,0},{40,125,0},{50,125,0},{50,115,0}};
-float change1_cop_x = 0;
-float change1_cop_y = 0;
-float copmid1x = 25;
-float copmid1y = 100;
-
-//COP 2
-static int coppos_two[8][3] =  {{90,05,15},{90,15,15},{100,15,15},{100,05,15},{110,25,0},{110,35,0},{120,35,0},{120,25,0}};
-float change2_cop_x = 0;
-float change2_cop_y = 0;
-float copmid2x = 95;
-float copmid2y = 10;
+static int coppos[10][8][3]={
+    {{20,95,15},{20,105,15},{30,105,15},{30,95,15},{40,115,0},{40,125,0},{50,125,0},{50,115,0}}, 
+    {{90,05,15},{90,15,15},{100,15,15},{100,05,15},{110,25,0},{110,35,0},{120,35,0},{120,25,0}},
+    {{400,400,15},{400,410,15},{410,410,15},{410,400,15},{420,420,0},{420,430,0},{430,430,0},{430,420,0}},
+    {{200,300,15},{200,310,15},{210,310,15},{210,300,15},{220,320,0},{220,330,0},{230,330,0},{230,320,0}},
+    {{400,40,15},{400,50,15},{410,50,15},{410,40,15},{420,60,0},{420,70,0},{430,70,0},{430,60,0}},
+    };
+float change_cop[10][2] = {0};
+float copmid[10][2]={{25,100},{95,10},{405,405},{205,305},{405,45}};
+float initpos[10][2]={{25,100},{95,10},{405,405},{205,305},{405,45}};
+float iamspeed[10]={0.3,0.3,0.2,0.2,0.2};
 
 void HeroCar::drawCar(int a,int b,int c,int d)
 {
@@ -82,19 +80,19 @@ void HeroCar::moveForward()
     {
         // up
         case 0: 
-            change_y+=0.9;
+            change_y+=1;
             break;
         // down
         case 1:
-            change_y-=0.9;
+            change_y-=1;
             break;
         // right
         case 2:
-            change_x+=0.9;
+            change_x+=1;
             break;
         // left
         case 3:
-            change_x-=0.9;
+            change_x-=1;
             break;
     }
     glTranslatef(change_x,change_y,0);
@@ -102,160 +100,87 @@ void HeroCar::moveForward()
     glPopMatrix();
 }
 
-void HeroCar::calmovement2(int pos[8][3])
+void HeroCar::calmovement(int pos[8][3],int carno)
 {
     heromidx = 60 + change_x;
     heromidy = 60 + change_y;
-    copmid2x = 95 + change2_cop_x;
-    copmid2y = 10 + change2_cop_y;
-    std::cout<<"hero "<<heromidx<<"  "<<heromidy<<std::endl;
-    std::cout<<"Cop "<<copmid2x<<"  "<<copmid2y<<std::endl;
+    copmid[carno][0] = initpos[carno][0] + change_cop[carno][0];
+    copmid[carno][1] = initpos[carno][1] + change_cop[carno][1];
     if (i==0)
     {
-        if(heromidx>copmid2x)
-            change2_cop_x+=0.15;
-        else if (heromidx<copmid2x)
-            change2_cop_x-=0.15;
-        if (heromidy>copmid2y)
-            change2_cop_y+=0.15;
-        else if (heromidy<copmid2y)
-            change2_cop_y-=0.15;
+        if(heromidx>copmid[carno][0])
+            change_cop[carno][0]+=iamspeed[carno];
+        else if (heromidx<copmid[carno][0])
+            change_cop[carno][0]-=iamspeed[carno];
+        if (heromidy>copmid[carno][1])
+            change_cop[carno][1]+=iamspeed[carno];
+        else if (heromidy<copmid[carno][1])
+            change_cop[carno][1]-=iamspeed[carno];
     }
 }
 
-void HeroCar::drawCop2(int a,int b,int c,int d)
+
+void HeroCar::drawCop(int a,int b,int c,int d,int carno)
 {
-    calmovement2(coppos_two);
+    calmovement(coppos[carno],carno);
     glBegin(GL_POLYGON);
-        glVertex3iv(coppos_two[a]);
-        glVertex3iv(coppos_two[b]);
-        glVertex3iv(coppos_two[c]);
-        glVertex3iv(coppos_two[d]);
+        glVertex3iv(coppos[carno][a]);
+        glVertex3iv(coppos[carno][b]);
+        glVertex3iv(coppos[carno][c]);
+        glVertex3iv(coppos[carno][d]);
     glEnd();
 }
 
-void HeroCar::drawCopCall2()
+
+void HeroCar::drawCopCall(int carno)
 {   
     if(i==0)
     {
-        std::cout<<"x in if "<<change2_cop_x<<std::endl;
-        std::cout<<"y in if "<<change2_cop_y<<std::endl;
         glPushMatrix();
         glLoadIdentity();
-        glTranslatef(change2_cop_x,change2_cop_y,0);
+        glTranslatef(change_cop[carno][0],change_cop[carno][1],0);
         colorMeSilly(colors::RED);
-        drawCop2(0,3,2,1);
+        drawCop(0,3,2,1,carno);
         colorMeSilly(colors::RED);
-        drawCop2(2,3,7,6);
+        drawCop(2,3,7,6,carno);
         colorMeSilly(colors::RED);
-        drawCop2(0,4,7,3);
+        drawCop(0,4,7,3,carno);
         colorMeSilly(colors::RED);
-        drawCop2(1,2,6,5);
+        drawCop(1,2,6,5,carno);
         colorMeSilly(colors::BLUE);
-        drawCop2(4,5,6,7);
+        drawCop(4,5,6,7,carno);
         colorMeSilly(colors::RED);
-        drawCop2(0,1,5,4);
+        drawCop(0,1,5,4,carno);
         glPopMatrix();
     }
     else
     {
         glPushMatrix();
         glLoadIdentity();
-        glTranslatef(change2_cop_x,change2_cop_y,0);
-        std::cout<<"x in else "<<change2_cop_x<<std::endl;
-        std::cout<<"y in else "<<change2_cop_y<<std::endl;
+        glTranslatef(change_cop[carno][0],change_cop[carno][1],0);
         colorMeSilly(colors::BLUE);
-        drawCop2(0,3,2,1);
+        drawCop(0,3,2,1,carno);
         colorMeSilly(colors::BLUE);
-        drawCop2(2,3,7,6);
+        drawCop(2,3,7,6,carno);
         colorMeSilly(colors::BLUE);
-        drawCop2(0,4,7,3);
+        drawCop(0,4,7,3,carno);
         colorMeSilly(colors::BLUE);
-        drawCop2(1,2,6,5);
+        drawCop(1,2,6,5,carno);
         colorMeSilly(colors::RED);
-        drawCop2(4,5,6,7);
+        drawCop(4,5,6,7,carno);
         colorMeSilly(colors::BLUE);
-        drawCop2(0,1,5,4);
+        drawCop(0,1,5,4,carno);
         glPopMatrix();
     }
 }
 
-void HeroCar::calmovement1(int pos[8][3])
+void HeroCar::drawgod()
 {
-    heromidx = 60 + change_x;
-    heromidy = 60 + change_y;
-    copmid1x = 25 + change1_cop_x;
-    copmid1y = 100 + change1_cop_y;
-    std::cout<<"hero "<<heromidx<<"  "<<heromidy<<std::endl;
-    std::cout<<"Cop "<<copmid1x<<"  "<<copmid1y<<std::endl;
-    if (i==0)
-    {
-        if(heromidx>copmid1x)
-            change1_cop_x+=0.1;
-        else if (heromidx<copmid1x)
-            change1_cop_x-=0.1;
-        if (heromidy>copmid1y)
-            change1_cop_y+=0.1;
-        else if (heromidy<copmid1y)
-            change1_cop_y-=0.1;
-    }
-}
-
-void HeroCar::drawCop1(int a,int b,int c,int d)
-{
-    calmovement1(coppos_one);
-    glBegin(GL_POLYGON);
-        glVertex3iv(coppos_one[a]);
-        glVertex3iv(coppos_one[b]);
-        glVertex3iv(coppos_one[c]);
-        glVertex3iv(coppos_one[d]);
-    glEnd();
-}
-
-void HeroCar::drawCopCall1()
-{   
-    if(i==0)
-    {
-        std::cout<<"x in if "<<change1_cop_x<<std::endl;
-        std::cout<<"y in if "<<change1_cop_y<<std::endl;
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslatef(change1_cop_x,change1_cop_y,0);
-        colorMeSilly(colors::RED);
-        drawCop1(0,3,2,1);
-        colorMeSilly(colors::RED);
-        drawCop1(2,3,7,6);
-        colorMeSilly(colors::RED);
-        drawCop1(0,4,7,3);
-        colorMeSilly(colors::RED);
-        drawCop1(1,2,6,5);
-        colorMeSilly(colors::BLUE);
-        drawCop1(4,5,6,7);
-        colorMeSilly(colors::RED);
-        drawCop1(0,1,5,4);
-        glPopMatrix();
-        i=1;
-    }
-    else
-    {
-        glPushMatrix();
-        glLoadIdentity();
-        glTranslatef(change1_cop_x,change1_cop_y,0);
-        std::cout<<"x in else "<<change1_cop_x<<std::endl;
-        std::cout<<"y in else "<<change1_cop_y<<std::endl;
-        colorMeSilly(colors::BLUE);
-        drawCop1(0,3,2,1);
-        colorMeSilly(colors::BLUE);
-        drawCop1(2,3,7,6);
-        colorMeSilly(colors::BLUE);
-        drawCop1(0,4,7,3);
-        colorMeSilly(colors::BLUE);
-        drawCop1(1,2,6,5);
-        colorMeSilly(colors::RED);
-        drawCop1(4,5,6,7);
-        colorMeSilly(colors::BLUE);
-        drawCop1(0,1,5,4);
-        glPopMatrix();
-        i=0;   
-    }
+    i++;
+    if(i>4) i=0;
+    drawCopCall(0);
+    drawCopCall(1);
+    drawCopCall(2);
+    drawCopCall(3);
+    drawCopCall(4);
 }

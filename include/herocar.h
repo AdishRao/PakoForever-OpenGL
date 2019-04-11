@@ -16,13 +16,11 @@ class HeroCar {
         void moveForward();
         void changeDirection(unsigned char);
 
-        void drawCopCall1();
-        void drawCop1(int,int,int,int);
-        void calmovement1(int[8][3]);
-
-        void drawCopCall2();
-        void drawCop2(int,int,int,int);
-        void calmovement2(int[8][3]);
+        void drawgod();
+        
+        void drawCopCall(int);
+        void drawCop(int,int,int,int,int);
+        void calmovement(int[8][3],int);
 };
 
 #endif

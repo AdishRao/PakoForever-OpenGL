@@ -1,4 +1,7 @@
 #include "../include/pakoglwindow.h"
+#include <string>
+int flag = 1;
+auto start = std::chrono::system_clock::now();
 
 void PakoGLWindow::keypressed(unsigned char key, int x, int y)
 {
@@ -49,7 +52,6 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
     const int sides=9;
     // defining bounds for ortho
     const int xMin=0, xMax=500, yMin=0, yMax=500;
-
     for (int i=0; i<obstacleCount; i++){
         // defining bounds used to limit centers of polygon 
         const int xCenter = rand() % xMax + xMin; 
@@ -63,7 +65,41 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
         }
         glEnd();
     }
+}
 
+void PakoGLWindow::drawTree(int obstacleCount,colors::colorNames color) {
+    // initialize random seed - otherwise random positions generated each time when display calls. 
+    srand (30);
+    // defining bounds for ortho
+    const int xMin=0, xMax=500, yMin=0, yMax=500;
+    for (int i=0; i<obstacleCount; i++){
+        // defining bounds used to limit centers of polygon 
+        const int xCenter = rand() % xMax + xMin; 
+        const int yCenter = rand() % yMax + yMin;
+        colorMeSilly(color); // using instead of glColor
+        glPushMatrix();
+        glLoadIdentity();
+        glTranslatef(xCenter,yCenter,0);
+        glRotatef(-90,1,0,0);
+        glutSolidCone(5,15,50,50);
+        glPopMatrix();	
+    }
+}
+
+void PakoGLWindow::drawTime()
+{
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    auto str = std::to_string(elapsed_seconds.count()); 
+    std::string strin = "Time: "+str;
+    glColor3f(1,1,1);
+    glRasterPos2f(10, 480);
+    int len, i;
+    len = strin.length();
+    for (i = 0; i < len; i++) 
+    {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, strin[i]);
+    }
 }
 
 void PakoGLWindow::initialize()
@@ -77,24 +113,13 @@ void PakoGLWindow::display()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     car.moveForward();
-    car.drawCopCall1();
-    car.drawCopCall2();
+    car.drawgod();
     // obstacleCount, radius, color
-    drawObstacles(50,3, colors::PINK);
+    drawObstacles(60,3, colors::BROWN);
+    drawTree(10,colors::GREEN);
+    drawTime();
     glFlush();
     glutSwapBuffers();
-}
-
-void PakoGLWindow::myReshape(int w,int h)
-{
-    glViewport(0,0,w,h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    if(w<=h)
-        glFrustum(-2.0,2.0,-2.0*(GLfloat)h/(GLfloat)w,2.0*(GLfloat)h/(GLfloat)w,2.0,20.0);
-    else
-        glFrustum(-2.0*(GLfloat)w/(GLfloat)h,2.0*(GLfloat)w/(GLfloat)h,-2.0,2.0,2.0,20.0);
-    glMatrixMode(GL_MODELVIEW);
 }
 
 void PakoGLWindow::idle() { 

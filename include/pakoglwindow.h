@@ -9,14 +9,14 @@ class PakoGLWindow {
         GLdouble viewer[3] = {60,60,20};
         HeroCar car;
         void drawObstacles(int, double, colors::colorNames);
+        void drawTree(int,colors::colorNames);
+        void drawTime();
     public:
         void initialize();
         void display();
         void idle();
         void keypressed(unsigned char, int, int);
         void specialKey(int, int, int);
-        void myReshape(int,int);
-
 };
 
 #endif

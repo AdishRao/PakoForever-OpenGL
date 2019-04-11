@@ -12,6 +12,8 @@
 
 #include <iostream>
 #include <math.h>
+#include <chrono>
+#include <ctime> 
 
 namespace colors
 {
@@ -23,10 +25,10 @@ namespace colors
         CYAN=4, 
         YELLOW=5, 
         PINK=6, 
-        WHITE=7
+        WHITE=7,
+        BROWN=8
     };
 }
-
 void colorMeSilly(colors::colorNames);
 
 #endif

@@ -27,6 +27,10 @@ void colorMeSilly(colors::colorNames name){
             break;
         case colors::WHITE:
             color[0] = color[1] = color[2] = 1;
+            break;
+        case colors::BROWN:
+            color[0]=0.8; color[1]=0.4;color[2]=0;
+            break;
     }
     glColor3fv(color);
 }; 
