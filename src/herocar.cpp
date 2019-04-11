@@ -4,13 +4,14 @@ int i = 0;
 float heromidx = 60;
 float heromidy = 60;
 //COP 1
-
+static int coppos_one[8][3] =  {{20,95,15},{20,105,15},{30,105,15},{30,95,15},{40,115,0},{40,125,0},{50,125,0},{50,115,0}};
 float change1_cop_x = 0;
 float change1_cop_y = 0;
 float copmid1x = 25;
 float copmid1y = 100;
 
 //COP 2
+static int coppos_two[8][3] =  {{90,05,15},{90,15,15},{100,15,15},{100,05,15},{110,25,0},{110,35,0},{120,35,0},{120,25,0}};
 float change2_cop_x = 0;
 float change2_cop_y = 0;
 float copmid2x = 95;
@@ -124,7 +125,6 @@ void HeroCar::calmovement2(int pos[8][3])
 
 void HeroCar::drawCop2(int a,int b,int c,int d)
 {
-    static int coppos_two[8][3] =  {{90,05,15},{90,15,15},{100,15,15},{100,05,15},{110,25,0},{110,35,0},{120,35,0},{120,25,0}};
     calmovement2(coppos_two);
     glBegin(GL_POLYGON);
         glVertex3iv(coppos_two[a]);
@@ -203,7 +203,6 @@ void HeroCar::calmovement1(int pos[8][3])
 
 void HeroCar::drawCop1(int a,int b,int c,int d)
 {
-    static int coppos_one[8][3] =  {{20,95,15},{20,105,15},{30,105,15},{30,95,15},{40,115,0},{40,125,0},{50,125,0},{50,115,0}};
     calmovement1(coppos_one);
     glBegin(GL_POLYGON);
         glVertex3iv(coppos_one[a]);
