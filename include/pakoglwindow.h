@@ -6,7 +6,7 @@
 
 class PakoGLWindow { 
     private:
-        GLdouble viewer[3] = {0,0,0};
+        GLdouble viewer[3] = {60,60,20};
         int currentScreen;
         HeroCar car;
         void drawObstacles(int, double, colors::colorNames);
@@ -16,6 +16,7 @@ class PakoGLWindow {
         void idle();
         void keypressed(unsigned char, int, int);
         void specialKey(int, int, int);
+        void myReshape(int,int);
         void startScreen();
 };
 

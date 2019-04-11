@@ -80,11 +80,15 @@ void PakoGLWindow::initialize()
 {    
     currentScreen = 0;
     glMatrixMode(GL_PROJECTION);
-    glOrtho(0.0,100.0,0.0,100.0,-2.0,15.0);
-    glClearColor(1.0,1.0,1.0,1.0);
+    glOrtho(0.0,1000.0,0.0,700.0,-2.0,15.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-2.0,20.0,-2.0,20.0,2.0,20.0);
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(60,60,15,60.0,60.0,0,0.0,1.0,0.0); 
+    //gluLookAt(viewer[0],viewer[1],viewer[2],60.0,60.0,7.5,0.0,1.0,0.0); 
 }
-
 
 void PakoGLWindow::display()
 {
@@ -94,18 +98,33 @@ void PakoGLWindow::display()
         case 0:
             startScreen();
             break; 
-        case 1:
-            car.moveForward();
-            // obstacleCount, radius, color
-            drawObstacles(7,3, colors::PINK);
-    
+        case 1:    
+        //glClearColor(1.0,1.0,1.0,0.0);
+        glMatrixMode(GL_MODELVIEW);
+        //gluLookAt(viewer[0],viewer[1],viewer[2],60.0,60.0,7.5,0.0,1.0,0.0); 
+        car.moveForward();
+        car.drawCopCall1();
+        car.drawCopCall2();
+        // obstacleCount, radius, color
+        drawObstacles(7,3, colors::PINK);
     }
     glFlush();
     glutSwapBuffers();
 }
 
-void PakoGLWindow::idle()
-{ 
+void PakoGLWindow::myReshape(int w,int h)
+{
+    glViewport(0,0,w,h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    if(w<=h)
+        glFrustum(-2.0,2.0,-2.0*(GLfloat)h/(GLfloat)w,2.0*(GLfloat)h/(GLfloat)w,2.0,20.0);
+    else
+        glFrustum(-2.0*(GLfloat)w/(GLfloat)h,2.0*(GLfloat)w/(GLfloat)h,-2.0,2.0,2.0,20.0);
+    glMatrixMode(GL_MODELVIEW);
+}
+
+void PakoGLWindow::idle() { 
     glutPostRedisplay();
 }
 
@@ -114,5 +133,4 @@ void PakoGLWindow::startScreen()
     glClearColor(0,0,0,0);
     glText(45,50,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Pako Forever!");
     glText(40,40,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to continue");
-    
 }
