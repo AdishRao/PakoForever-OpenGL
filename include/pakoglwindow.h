@@ -6,7 +6,7 @@
 
 class PakoGLWindow { 
     private:
-        GLdouble viewer[3] = {50,50,20};
+        GLdouble viewer[3] = {60,60,20};
         HeroCar car;
         void drawObstacles(int, double, colors::colorNames);
     public:

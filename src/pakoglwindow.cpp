@@ -69,21 +69,25 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
 void PakoGLWindow::initialize()
 {    
     glMatrixMode(GL_PROJECTION);
-    
-    glOrtho(0.0,200.0,0.0,200.0,-2.0,15.0);
-    
-   // glClearColor(1.0,1.0,1.0,0.0);
+    glOrtho(0.0,1000.0,0.0,700.0,-2.0,15.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(-2.0,20.0,-2.0,20.0,2.0,20.0);
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(60,60,15,60.0,60.0,0,0.0,1.0,0.0); 
+    //gluLookAt(viewer[0],viewer[1],viewer[2],60.0,60.0,7.5,0.0,1.0,0.0); 
 }
-
 
 void PakoGLWindow::display()
 {
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     //glClearColor(1.0,1.0,1.0,0.0);
-    //gluLookAt(viewer[0],viewer[1],viewer[2],0.0,0.0,0.0,0.0,1.0,0.0); 
+    glMatrixMode(GL_MODELVIEW);
+    //gluLookAt(viewer[0],viewer[1],viewer[2],60.0,60.0,7.5,0.0,1.0,0.0); 
     car.moveForward();
-    car.drawCopCall();
+    car.drawCopCall1();
+    car.drawCopCall2();
     // obstacleCount, radius, color
     drawObstacles(7,3, colors::PINK);
     glFlush();
