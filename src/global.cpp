@@ -34,3 +34,15 @@ void colorMeSilly(colors::colorNames name){
     }
     glColor3fv(color);
 }; 
+
+// prints text 
+void glText(float x, float y, float r, float g, float b, void* font, std::string string)
+{
+  glColor3f( r, g, b );
+  glRasterPos2f(x, y);
+  int len, i;
+  len = (int) string.length();
+  for (i = 0; i < len; i++) {
+    glutBitmapCharacter(font, string[i]);
+  }
+}

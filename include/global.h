@@ -14,6 +14,7 @@
 #include <math.h>
 #include <chrono>
 #include <ctime> 
+#include <string.h>
 
 namespace colors
 {
@@ -30,5 +31,8 @@ namespace colors
     };
 }
 void colorMeSilly(colors::colorNames);
+
+void glText(float x, float y, float r, float g, float b, void* font, std::string string);
+
 
 #endif
