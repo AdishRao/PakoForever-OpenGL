@@ -33,3 +33,6 @@
 
 # Final Executable
 pako
+
+# vs code intellisense 
+.vscode/ipch
