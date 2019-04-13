@@ -21,7 +21,7 @@ class HeroCar {
         void drawCopCall(int);
         void drawCop(int,int,int,int,int);
         void calmovement(int[8][3],int);
-        bool heroCollides();
+        bool heroCollides(GLfloat **, GLfloat **, int, int);
         void resetPositions();
 };
 

@@ -13,8 +13,8 @@ static int coppos[10][8][3]={
 float change_cop[10][2] = {0};
 float copmid[10][2]={{25,100},{95,10},{405,405},{205,305},{405,45}};
 float initpos[10][2]={{25,100},{95,10},{405,405},{205,305},{405,45}};
-float iamspeed[10]={0.02,0.02,0.02,0.05,0.05};
-
+const float HEROSPEED = 0.05;
+float iamspeed[10]={0.002,0.002,0.002,0.005,0.005};
 void HeroCar::drawCar(int a,int b,int c,int d)
 {
     glBegin(GL_POLYGON);
@@ -80,19 +80,19 @@ void HeroCar::moveForward()
     {
         // up
         case 0: 
-            change_y+=0.1;
+            change_y+=HEROSPEED;
             break;
         // down
         case 1:
-            change_y-=0.1;
+            change_y-=HEROSPEED;
             break;
         // right
         case 2:
-            change_x+=0.1;
+            change_x+=HEROSPEED;
             break;
         // left
         case 3:
-            change_x-=0.1;
+            change_x-=HEROSPEED;
             break;
     }
     glTranslatef(change_x,change_y,0);
@@ -185,13 +185,35 @@ void HeroCar::drawgod()
     drawCopCall(4);
 }
 
-bool HeroCar::heroCollides() 
+bool HeroCar::heroCollides(GLfloat **obstacles, GLfloat **trees, int obstacleCount, int treeCount) 
 {
+    colorMeSilly(colors::WHITE);
+    glPointSize(5);
+    glBegin(GL_POINTS);
+    glVertex2d(heromidx,heromidy);
+    glEnd();
     const int THRESHOLD = 5;
     for (int carno=0; carno<5; carno++) {
         float dist = pow((pow(heromidx-copmid[carno][0],2) + pow(heromidy-copmid[carno][1],2)), 2);
         if (dist <= THRESHOLD)
             return true;
+    }
+    if (obstacles!=nullptr){
+        for (int obno=0; obno<obstacleCount; obno++) {
+            std::cout<<obstacles[obno][0]<<"<->"<<heromidx<<" "<<obstacles[obno][1]<<"<->"<<heromidy<<std::endl;
+            float dist = pow((pow(heromidx-obstacles[obno][0],2) + pow(heromidy-obstacles[obno][1],2)), 2);
+            if (dist <= THRESHOLD+10)
+                return true;
+        }
+        std::cout<<"No obstacle collision";
+    }
+    if (trees!=nullptr) {
+        for (int treeno=0; treeno<treeCount; treeno++) {
+            float dist = pow((pow(heromidx-trees[treeno][0],2) + pow(heromidy-trees[treeno][1],2)), 2);
+            if (dist <= THRESHOLD+10)
+                return true;
+        }
+        std::cout<<"No tree collision";
     }
     return false;
 }
@@ -199,4 +221,11 @@ bool HeroCar::heroCollides()
 void HeroCar::resetPositions()
 { 
     // need to reset positions
+    change_x = 0;
+    change_y = 0;
+    for(int i=0; i<5; i++) { 
+        change_cop[i][0] = 0;
+        change_cop[i][1] = 0;
+        calmovement(coppos[i],i);
+    }
 }

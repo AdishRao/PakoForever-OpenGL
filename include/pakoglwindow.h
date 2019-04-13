@@ -9,9 +9,12 @@ class PakoGLWindow {
         GLdouble viewer[3] = {60,60,20};
         enum screen{startgame, gamescreen, gameover} currentScreen;
         HeroCar car;
-        void drawObstacles(int, double, colors::colorNames);
-        void drawTree(int,colors::colorNames);
+        GLfloat **obstacles = nullptr, **trees =nullptr;
+        int obstacleCount,treeCount;
+        void drawObstacles(double, colors::colorNames);
+        void drawTree(colors::colorNames);
         void drawTime();
+        void freeMemory();
     public:
         void initialize();
         void display();

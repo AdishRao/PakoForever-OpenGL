@@ -52,7 +52,7 @@ void PakoGLWindow::specialKey(int key, int x, int y)
 
 // Draws 9 sided polygons in random locations using translate
 // Polygon formula taken from  https://gist.github.com/kenpower/3782654 and modified because it drew one side less
-void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::colorNames color) 
+void PakoGLWindow::drawObstacles(double radius, colors::colorNames color) 
 {
     // initialize random seed - otherwise random positions generated each time when display calls. 
     srand (33);
@@ -60,35 +60,58 @@ void PakoGLWindow::drawObstacles(int obstacleCount, double radius, colors::color
     const int sides=9;
     // defining bounds for ortho
     const int xMin=0, xMax=500, yMin=0, yMax=500;
+    
+    obstacles = new GLfloat*[obstacleCount];   
+    
     for (int i=0; i<obstacleCount; i++){
         // defining bounds used to limit centers of polygon 
         const int xCenter = rand() % xMax + xMin; 
         const int yCenter = rand() % yMax + yMin;
+        
+        obstacles[i] = new GLfloat[2];
+        obstacles[i][0] = xCenter;
+        obstacles[i][1] = yCenter;
+        glPointSize(8);
+        colorMeSilly(colors::YELLOW);
+        glBegin(GL_POINTS);
+        glVertex2f(xCenter,yCenter);
+        glEnd();
 
         glBegin(GL_POLYGON);
         for(int i=0;i<=sides;i++)
         {
             double angle=i*2*M_PI/sides;
             colorMeSilly(color); // using instead of glColor
-            glVertex2d(xCenter+radius*cos(angle),yCenter+radius*sin(angle));	
+            glVertex2d(xCenter+radius*cos(angle),yCenter+radius*sin(angle));
+            
         }
         glEnd();
     }
 }
 
-void PakoGLWindow::drawTree(int obstacleCount,colors::colorNames color) {
+void PakoGLWindow::drawTree(colors::colorNames color) {
     // initialize random seed - otherwise random positions generated each time when display calls. 
     srand (30);
     // defining bounds for ortho
     const int xMin=0, xMax=500, yMin=0, yMax=500;
-    for (int i=0; i<obstacleCount; i++){
+    trees = new GLfloat*[treeCount];
+
+    for (int i=0; i<treeCount; i++){
         // defining bounds used to limit centers of polygon 
         const int xCenter = rand() % xMax + xMin; 
         const int yCenter = rand() % yMax + yMin;
-        colorMeSilly(color); // using instead of glColor
+        trees[i] = new GLfloat[2];
+        trees[i][0] = xCenter;
+        trees[i][1] = yCenter;
         glPushMatrix();
         glLoadIdentity();
         glTranslatef(xCenter,yCenter,0);
+        glPointSize(10);
+        colorMeSilly(colors::YELLOW);
+        glBegin(GL_POINTS);
+        glVertex2f(0,0);
+        glEnd();
+        colorMeSilly(color); // using instead of glColor
         glRotatef(-90,1,0,0);
         glutSolidCone(5,15,50,50);
         glPopMatrix();	
@@ -114,6 +137,8 @@ void PakoGLWindow::drawTime()
 void PakoGLWindow::initialize()
 {
     currentScreen = startgame;
+    obstacleCount = 1;
+    treeCount = 1;
     glMatrixMode(GL_PROJECTION);
     glOrtho(0.0,500.0,0.0,500.0,-2.0,15.0);
     glMatrixMode(GL_MODELVIEW);
@@ -128,7 +153,7 @@ void PakoGLWindow::display()
             startScreen();
             break; 
         case gamescreen:
-                if ( car.heroCollides() ) {
+                if ( car.heroCollides(obstacles,trees,obstacleCount,treeCount) ) {
                     car.resetPositions();  
                     currentScreen = gameover;
                     glutPostRedisplay();
@@ -137,8 +162,9 @@ void PakoGLWindow::display()
                     car.moveForward();
                     car.drawgod();
                     // obstacleCount, radius, color
-                    drawObstacles(60,3, colors::BROWN);
-                    drawTree(10,colors::GREEN);
+                    freeMemory();
+                    drawObstacles(3, colors::BROWN);
+                    drawTree(colors::GREEN);
                     drawTime();
                 }
                 break;
@@ -168,4 +194,21 @@ void PakoGLWindow::gameOverScreen()
     glClearColor(0,0,0,0);
     glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "END GAME");
     glText(180,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to start again");
+}
+
+void PakoGLWindow::freeMemory()
+{
+    if (obstacles!=nullptr){
+        for(int i=0; i<obstacleCount; i++) { 
+            delete obstacles[i];
+        }
+        delete obstacles;
+    }
+    if (trees!=nullptr){
+        for(int i=0; i<treeCount; i++) { 
+            delete trees[i];
+        }
+        delete trees;
+    }
+    
 }
