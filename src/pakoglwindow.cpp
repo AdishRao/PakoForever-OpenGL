@@ -123,6 +123,7 @@ void PakoGLWindow::drawTime()
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
     auto str = std::to_string(elapsed_seconds.count()); 
+    time = elapsed_seconds.count();
     std::string strin = "Time: "+str;
     glColor3f(1,1,1);
     glRasterPos2f(10, 480);
@@ -137,8 +138,8 @@ void PakoGLWindow::drawTime()
 void PakoGLWindow::initialize()
 {
     currentScreen = startgame;
-    obstacleCount = 1;
-    treeCount = 1;
+    obstacleCount = 20;
+    treeCount = 10;
     glMatrixMode(GL_PROJECTION);
     glOrtho(0.0,500.0,0.0,500.0,-2.0,15.0);
     glMatrixMode(GL_MODELVIEW);
@@ -191,9 +192,11 @@ void PakoGLWindow::startScreen()
 
 void PakoGLWindow::gameOverScreen()
 {
+
     glClearColor(0,0,0,0);
     glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "END GAME");
-    glText(180,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to start again");
+    glText(182,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Your Score is "+std::to_string(time));
+    glText(178,210,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to start again");
 }
 
 void PakoGLWindow::freeMemory()

@@ -8,6 +8,7 @@ class PakoGLWindow {
     private:
         GLdouble viewer[3] = {60,60,20};
         enum screen{startgame, gamescreen, gameover} currentScreen;
+        double time;
         HeroCar car;
         GLfloat **obstacles = nullptr, **trees =nullptr;
         int obstacleCount,treeCount;
