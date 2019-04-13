@@ -7,7 +7,7 @@
 class PakoGLWindow { 
     private:
         GLdouble viewer[3] = {60,60,20};
-        int currentScreen;
+        enum screen{startgame, gamescreen, gameover} currentScreen;
         HeroCar car;
         void drawObstacles(int, double, colors::colorNames);
         void drawTree(int,colors::colorNames);
@@ -19,6 +19,7 @@ class PakoGLWindow {
         void keypressed(unsigned char, int, int);
         void specialKey(int, int, int);
         void startScreen();
+        void gameOverScreen();
 };
 
 #endif

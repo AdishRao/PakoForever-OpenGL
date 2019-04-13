@@ -5,7 +5,7 @@ float heromidx = 60;
 float heromidy = 60;
 static int coppos[10][8][3]={
     {{20,95,15},{20,105,15},{30,105,15},{30,95,15},{40,115,0},{40,125,0},{50,125,0},{50,115,0}}, 
-    {{90,05,15},{90,15,15},{100,15,15},{100,05,15},{110,25,0},{110,35,0},{120,35,0},{120,25,0}},
+    {{90,5,15},{90,15,15},{100,15,15},{100,5,15},{110,25,0},{110,35,0},{120,35,0},{120,25,0}},
     {{400,400,15},{400,410,15},{410,410,15},{410,400,15},{420,420,0},{420,430,0},{430,430,0},{430,420,0}},
     {{200,300,15},{200,310,15},{210,310,15},{210,300,15},{220,320,0},{220,330,0},{230,330,0},{230,320,0}},
     {{400,40,15},{400,50,15},{410,50,15},{410,40,15},{420,60,0},{420,70,0},{430,70,0},{430,60,0}},
@@ -13,7 +13,7 @@ static int coppos[10][8][3]={
 float change_cop[10][2] = {0};
 float copmid[10][2]={{25,100},{95,10},{405,405},{205,305},{405,45}};
 float initpos[10][2]={{25,100},{95,10},{405,405},{205,305},{405,45}};
-float iamspeed[10]={0.3,0.3,0.2,0.2,0.2};
+float iamspeed[10]={0.02,0.02,0.02,0.05,0.05};
 
 void HeroCar::drawCar(int a,int b,int c,int d)
 {
@@ -80,19 +80,19 @@ void HeroCar::moveForward()
     {
         // up
         case 0: 
-            change_y+=1;
+            change_y+=0.1;
             break;
         // down
         case 1:
-            change_y-=1;
+            change_y-=0.1;
             break;
         // right
         case 2:
-            change_x+=1;
+            change_x+=0.1;
             break;
         // left
         case 3:
-            change_x-=1;
+            change_x-=0.1;
             break;
     }
     glTranslatef(change_x,change_y,0);
@@ -183,4 +183,20 @@ void HeroCar::drawgod()
     drawCopCall(2);
     drawCopCall(3);
     drawCopCall(4);
+}
+
+bool HeroCar::heroCollides() 
+{
+    const int THRESHOLD = 5;
+    for (int carno=0; carno<5; carno++) {
+        float dist = pow((pow(heromidx-copmid[carno][0],2) + pow(heromidy-copmid[carno][1],2)), 2);
+        if (dist <= THRESHOLD)
+            return true;
+    }
+    return false;
+}
+
+void HeroCar::resetPositions()
+{ 
+    // need to reset positions
 }

@@ -5,9 +5,9 @@ auto start = std::chrono::system_clock::now();
 
 void PakoGLWindow::keypressed(unsigned char key, int x, int y)
 {
-    if (currentScreen==0) 
+    if (currentScreen==startgame | currentScreen==gameover) 
     { 
-        currentScreen = 1;
+        currentScreen = gamescreen;
         return;
     } 
     switch(key) 
@@ -112,8 +112,8 @@ void PakoGLWindow::drawTime()
 }
 
 void PakoGLWindow::initialize()
-{    
-    currentScreen = 0;
+{
+    currentScreen = startgame;
     glMatrixMode(GL_PROJECTION);
     glOrtho(0.0,500.0,0.0,500.0,-2.0,15.0);
     glMatrixMode(GL_MODELVIEW);
@@ -124,28 +124,48 @@ void PakoGLWindow::display()
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     switch (currentScreen) 
     {
-        case 0:
+        case startgame:
             startScreen();
             break; 
-        case 1:
-                car.moveForward();
-                car.drawgod();
-                // obstacleCount, radius, color
-                drawObstacles(60,3, colors::BROWN);
-                drawTree(10,colors::GREEN);
-                drawTime();
+        case gamescreen:
+                if ( car.heroCollides() ) {
+                    car.resetPositions();  
+                    currentScreen = gameover;
+                    glutPostRedisplay();
+                }
+                else { 
+                    car.moveForward();
+                    car.drawgod();
+                    // obstacleCount, radius, color
+                    drawObstacles(60,3, colors::BROWN);
+                    drawTree(10,colors::GREEN);
+                    drawTime();
+                }
+                break;
+        case gameover:
+            std::cout<<"gameover";
+            gameOverScreen();
     }
     glFlush();
     glutSwapBuffers();
 }
 
 void PakoGLWindow::idle() { 
-    glutPostRedisplay();
+    if ( currentScreen == gamescreen ){
+        glutPostRedisplay();
+    }
 }
 
 void PakoGLWindow::startScreen()
 {
     glClearColor(0,0,0,0);
-    glText(45,50,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Pako Forever!");
-    glText(40,40,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to continue");
+    glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Pako Forever!");
+    glText(180,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to continue");
+}
+
+void PakoGLWindow::gameOverScreen()
+{
+    glClearColor(0,0,0,0);
+    glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "END GAME");
+    glText(180,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to start again");
 }

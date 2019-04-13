@@ -21,6 +21,8 @@ class HeroCar {
         void drawCopCall(int);
         void drawCop(int,int,int,int,int);
         void calmovement(int[8][3],int);
+        bool heroCollides();
+        void resetPositions();
 };
 
 #endif
