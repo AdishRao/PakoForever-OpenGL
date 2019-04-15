@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "herocar.h"
+#include "copcar.h"
 
 class PakoGLWindow { 
     private:
@@ -10,7 +11,9 @@ class PakoGLWindow {
         enum screen{startgame, gamescreen, gameover} currentScreen;
         double time;
         HeroCar car;
+        int copCount; 
         GLfloat **obstacles = nullptr, **trees =nullptr;
+        CopCar **cops;
         int obstacleCount,treeCount;
         void drawObstacles(double, colors::colorNames);
         void drawTree(colors::colorNames);

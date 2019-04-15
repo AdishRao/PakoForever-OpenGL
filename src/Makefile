@@ -33,7 +33,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 # define the CPP source files
-SRCS = main.cpp pakoglwindow.cpp herocar.cpp global.cpp
+SRCS = main.cpp pakoglwindow.cpp herocar.cpp global.cpp copcar.cpp
 
 # define the CPP object files 
 #

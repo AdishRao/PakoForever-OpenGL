@@ -1,5 +1,5 @@
 #include "../include/pakoglwindow.h"
-#include <string>
+
 int flag = 1;
 auto start = std::chrono::system_clock::now();
 
@@ -72,7 +72,7 @@ void PakoGLWindow::drawObstacles(double radius, colors::colorNames color)
         obstacles[i][0] = xCenter;
         obstacles[i][1] = yCenter;
         glPointSize(8);
-        colorMeSilly(colors::YELLOW);
+        setGlColor(colors::YELLOW);
         glBegin(GL_POINTS);
         glVertex2f(xCenter,yCenter);
         glEnd();
@@ -81,7 +81,7 @@ void PakoGLWindow::drawObstacles(double radius, colors::colorNames color)
         for(int i=0;i<=sides;i++)
         {
             double angle=i*2*M_PI/sides;
-            colorMeSilly(color); // using instead of glColor
+            setGlColor(color); // using instead of glColor
             glVertex2d(xCenter+radius*cos(angle),yCenter+radius*sin(angle));
             
         }
@@ -107,11 +107,11 @@ void PakoGLWindow::drawTree(colors::colorNames color) {
         glLoadIdentity();
         glTranslatef(xCenter,yCenter,0);
         glPointSize(10);
-        colorMeSilly(colors::YELLOW);
+        setGlColor(colors::YELLOW);
         glBegin(GL_POINTS);
         glVertex2f(0,0);
         glEnd();
-        colorMeSilly(color); // using instead of glColor
+        setGlColor(color); // using instead of glColor
         glRotatef(-90,1,0,0);
         glutSolidCone(5,15,50,50);
         glPopMatrix();	
@@ -140,6 +140,13 @@ void PakoGLWindow::initialize()
     currentScreen = startgame;
     obstacleCount = 20;
     treeCount = 10;
+    copCount = 5;
+    cops = new CopCar*[copCount];
+    for (int i=0; i<copCount; i++) { 
+        cops[i] = new CopCar(i);
+        cops[i]->resetPositions();
+    }
+
     glMatrixMode(GL_PROJECTION);
     glOrtho(0.0,500.0,0.0,500.0,-2.0,15.0);
     glMatrixMode(GL_MODELVIEW);
@@ -154,14 +161,22 @@ void PakoGLWindow::display()
             startScreen();
             break; 
         case gamescreen:
-                if ( car.heroCollides(obstacles,trees,obstacleCount,treeCount) ) {
-                    car.resetPositions();  
+                if ( car.heroCollides(obstacles,trees,cops,obstacleCount,treeCount,copCount) ) {
+                    car.resetPositions();
+                    for (int i=0; i<copCount; i++) { 
+                        cops[i]->resetPositions();
+                    }
                     currentScreen = gameover;
                     glutPostRedisplay();
                 }
                 else { 
                     car.moveForward();
-                    car.drawgod();
+
+                    for (int i=0; i<copCount; i++) { 
+                        cops[i]->changeColor();
+                        cops[i]->drawCarCall(car.heromidx, car.heromidy);
+                    }
+                    
                     // obstacleCount, radius, color
                     freeMemory();
                     drawObstacles(3, colors::BROWN);

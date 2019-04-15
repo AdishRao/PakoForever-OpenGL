@@ -15,6 +15,7 @@
 #include <chrono>
 #include <ctime> 
 #include <string.h>
+#include <string>
 
 namespace colors
 {
@@ -30,7 +31,7 @@ namespace colors
         BROWN=8
     };
 }
-void colorMeSilly(colors::colorNames);
+void setGlColor(colors::colorNames);
 
 void glText(float x, float y, float r, float g, float b, void* font, std::string string);
 

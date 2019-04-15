@@ -2,6 +2,7 @@
 #define HEROCAR_H
 
 #include "global.h"
+#include "../include/copcar.h"
 
 class HeroCar { 
     private:                   //0              1           2       3           4           5       6       7
@@ -11,17 +12,16 @@ class HeroCar {
         int change_z=0; // 0 = near, 1 = far
         int currentdir=0;
     public:
+        GLfloat heromidx, heromidy; 
         void drawCarCall();
         void drawCar(int,int,int,int);
         void moveForward();
         void changeDirection(unsigned char);
 
-        void drawgod();
-        
         void drawCopCall(int);
         void drawCop(int,int,int,int,int);
         void calmovement(int[8][3],int);
-        bool heroCollides(GLfloat **, GLfloat **, int, int);
+        bool heroCollides(GLfloat **, GLfloat **, CopCar **, int, int, int);
         void resetPositions();
 };
 
