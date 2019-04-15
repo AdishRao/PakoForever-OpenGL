@@ -167,6 +167,7 @@ void PakoGLWindow::display()
                         cops[i]->resetPositions();
                     }
                     currentScreen = gameover;
+                    time = 0;
                     glutPostRedisplay();
                 }
                 else { 
