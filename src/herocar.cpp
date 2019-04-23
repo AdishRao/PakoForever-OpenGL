@@ -88,7 +88,7 @@ void HeroCar::moveForward()
             break;
     }
     //std::cout<<"CHANGE"<<change_x<<" "<<change_y<<std::endl;
-    heromidx = 80 + change_x;
+    heromidx = 80 + change_x;  // When you're changing this also change it in the reset posion function
     heromidy = 80 + change_y;
     glTranslatef(change_x,change_y,0);
     drawCarCall();
@@ -98,6 +98,9 @@ void HeroCar::moveForward()
 bool HeroCar::heroCollides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, int obstacleCount, int treeCount, int copCount) 
 {
     const int THRESHOLD = 5;
+    if ( heromidx < 0 || heromidx >= 500 || heromidy <0 || heromidy >= 500) { 
+        return true;
+    }
     for (int carno=0; carno<copCount; carno++) {
         float dist = pow((pow(heromidx-cops[carno]->mid[0],2) + pow(heromidy-cops[carno]->mid[1],2)), 2);
         if (dist <= THRESHOLD)
@@ -125,7 +128,7 @@ bool HeroCar::heroCollides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, 
 
 void HeroCar::resetPositions()
 { 
-    // need to reset positions
+    heromidx =  heromidy = 0;
     change_x = 0;
     change_y = 0;
 }
