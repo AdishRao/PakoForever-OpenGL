@@ -36,3 +36,5 @@ pako
 
 # vs code intellisense 
 .vscode/ipch
+
+.DS_STORE

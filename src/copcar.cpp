@@ -8,8 +8,8 @@ const int copBounds[10][8][3]={
     {{400,40,15},{400,50,15},{410,50,15},{410,40,15},{420,60,0},{420,70,0},{430,70,0},{430,60,0}},
 };
 
-const float copMid[10][2]={{25,100},{95,10},{405,405},{205,305},{405,45}};
-const float copSpeed[10]={0.02,0.02,0.02,0.05,0.05};
+const float copMid[10][2]={{25+20,100+20},{95+20,10+20},{405+20,405+20},{205+20,305+20},{405+20,45+20}};
+float copSpeed[10]={0.2,0.2,0.2,0.3,0.3};
 
 CopCar::CopCar(int carno)
 {
@@ -53,9 +53,13 @@ void CopCar::drawCarCall(GLfloat destx, GLfloat desty)
 {   
     this->destx = destx;
     this->desty = desty;
-
-    colors::colorNames primary = (colorMode<4)?colors::RED:colors::BLUE;
-    colors::colorNames secondary = (colorMode<4)?colors::BLUE:colors::RED;
+    copSpeed[0]+=0.00003;
+    copSpeed[1]+=0.00001;
+    copSpeed[2]+=0.00002;
+    copSpeed[3]+=0.00005;
+    copSpeed[4]+=0.000033;
+    colors::colorNames primary = (colorMode<3)?colors::RED:colors::BLUE;
+    colors::colorNames secondary = (colorMode<3)?colors::BLUE:colors::RED;
     glPushMatrix();
     glLoadIdentity();
     glTranslatef(change[0],change[1],0);
@@ -77,6 +81,37 @@ void CopCar::drawCarCall(GLfloat destx, GLfloat desty)
 void CopCar::changeColor() {
     colorMode = (colorMode + 1)%4;
 }
+
+bool CopCar::collides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, int obstacleCount, int treeCount, int copCount) 
+{
+    const int THRESHOLD = 5;
+    const GLfloat midx = mid[0], midy = mid[1];
+    for (int carno=0; carno<copCount; carno++) {
+        if (carno == this->carno) continue;
+        float dist = pow((pow(midx-cops[carno]->mid[0],2) + pow(midy-cops[carno]->mid[1],2)), 2);
+        if (dist <= THRESHOLD)
+            return true;
+    }
+    if (obstacles!=nullptr){
+        for (int obno=0; obno<obstacleCount; obno++) {
+            //std::cout<<obstacles[obno][0]<<"<->"<<midx<<" "<<obstacles[obno][1]<<"<->"<<midy<<std::endl;
+            float dist = pow((pow(midx-obstacles[obno][0],2) + pow(midy-obstacles[obno][1],2)), 2);
+            if (dist <= THRESHOLD+10)
+                return true;
+        }
+        //std::cout<<"No obstacle collision";
+    }
+    if (trees!=nullptr) {
+        for (int treeno=0; treeno<treeCount; treeno++) {
+            float dist = pow((pow(midx-trees[treeno][0],2) + pow(midy-trees[treeno][1],2)), 2);
+            if (dist <= THRESHOLD+10)
+                return true;
+        }
+        //std::cout<<"No tree collision";
+    }
+    return false;
+}
+
 
 void CopCar::resetPositions() { 
     change[0] = change[1] = change[2] = 0;

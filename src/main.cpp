@@ -11,6 +11,10 @@ class Callbacks {
         static void keypressed(unsigned char k, int x, int y) { window.keypressed(k,x,y); }
 };
 
+void playSong(){ 
+    system("afplay song.mp3");
+}
+
 int main(int argc, char **argv)
 {
     glutInit(&argc,argv);
@@ -20,6 +24,7 @@ int main(int argc, char **argv)
     glutCreateWindow("PAKO FOREVER!");
     glEnable(GL_DEPTH_TEST); 
     window.initialize();
+    //std::thread th1(playSong);
     glutDisplayFunc(Callbacks::display);
     glutIdleFunc(Callbacks::idle);
     glutSpecialFunc(Callbacks::specialKey);

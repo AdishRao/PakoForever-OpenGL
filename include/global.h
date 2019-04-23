@@ -11,11 +11,13 @@
 #endif
 
 #include <iostream>
+#include <unistd.h>
 #include <math.h>
 #include <chrono>
 #include <ctime> 
 #include <string.h>
 #include <string>
+#include <thread> 
 
 namespace colors
 {

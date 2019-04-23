@@ -17,6 +17,8 @@ class CopCar {
         void drawCarCall(GLfloat,GLfloat);
         void changeColor(); 
         void resetPositions();
+        bool collides(GLfloat **, GLfloat **, CopCar **, int, int, int);
+
 };
 
 #endif

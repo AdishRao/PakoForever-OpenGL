@@ -3,6 +3,8 @@
 int flag = 1;
 auto start = std::chrono::system_clock::now();
 
+    
+
 void PakoGLWindow::keypressed(unsigned char key, int x, int y)
 {
     if (currentScreen==startgame | currentScreen==gameover) 
@@ -138,8 +140,8 @@ void PakoGLWindow::drawTime()
 void PakoGLWindow::initialize()
 {
     currentScreen = startgame;
-    obstacleCount = 20;
-    treeCount = 10;
+    obstacleCount = 50;
+    treeCount = 20;
     copCount = 5;
     cops = new CopCar*[copCount];
     for (int i=0; i<copCount; i++) { 
@@ -159,6 +161,7 @@ void PakoGLWindow::display()
     {
         case startgame:
             startScreen();
+            time = 0;
             break; 
         case gamescreen:
                 if ( car.heroCollides(obstacles,trees,cops,obstacleCount,treeCount,copCount) ) {
@@ -166,14 +169,21 @@ void PakoGLWindow::display()
                     for (int i=0; i<copCount; i++) { 
                         cops[i]->resetPositions();
                     }
+                    for(int i=0;i<1000000;i++)
+                    {
+                        glClearColor(0,0,0,0);
+                        glClearColor(1,1,1,1);
+                    }
                     currentScreen = gameover;
-                    time = 0;
                     glutPostRedisplay();
                 }
                 else { 
                     car.moveForward();
 
-                    for (int i=0; i<copCount; i++) { 
+                    for (int i=0; i<copCount; i++) {
+                        if ( cops[i]->collides(obstacles,trees,cops,obstacleCount,treeCount,copCount) ) { 
+                            cops[i]->resetPositions();
+                        }
                         cops[i]->changeColor();
                         cops[i]->drawCarCall(car.heromidx, car.heromidy);
                     }
@@ -208,11 +218,11 @@ void PakoGLWindow::startScreen()
 
 void PakoGLWindow::gameOverScreen()
 {
-
     glClearColor(0,0,0,0);
     glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "END GAME");
     glText(182,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Your Score is "+std::to_string(time));
     glText(178,210,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to start again");
+    start = std::chrono::system_clock::now();
 }
 
 void PakoGLWindow::freeMemory()

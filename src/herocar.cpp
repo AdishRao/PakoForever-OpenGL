@@ -1,7 +1,7 @@
 #include "../include/herocar.h"
 
 int i = 0;
-const float HEROSPEED = 0.05;
+const float HEROSPEED = 0.9;
 void HeroCar::drawCar(int a,int b,int c,int d)
 {
     glBegin(GL_POLYGON);
@@ -62,6 +62,11 @@ void HeroCar::changeDirection(unsigned char key) {
 
 void HeroCar::moveForward()
 {
+    setGlColor(colors::WHITE);
+    glPointSize(5);
+    glBegin(GL_POINTS);
+    glVertex2d(heromidx,heromidy);
+    glEnd();
     glPushMatrix(); 
     switch(currentdir)
     {
@@ -82,9 +87,9 @@ void HeroCar::moveForward()
             change_x-=HEROSPEED;
             break;
     }
-    std::cout<<change_x<<" "<<change_y;
-    heromidx = 60 + change_x;
-    heromidy = 60 + change_y;
+    //std::cout<<"CHANGE"<<change_x<<" "<<change_y<<std::endl;
+    heromidx = 80 + change_x;
+    heromidy = 80 + change_y;
     glTranslatef(change_x,change_y,0);
     drawCarCall();
     glPopMatrix();
@@ -92,11 +97,6 @@ void HeroCar::moveForward()
 
 bool HeroCar::heroCollides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, int obstacleCount, int treeCount, int copCount) 
 {
-    setGlColor(colors::WHITE);
-    glPointSize(5);
-    glBegin(GL_POINTS);
-    glVertex2d(heromidx,heromidy);
-    glEnd();
     const int THRESHOLD = 5;
     for (int carno=0; carno<copCount; carno++) {
         float dist = pow((pow(heromidx-cops[carno]->mid[0],2) + pow(heromidy-cops[carno]->mid[1],2)), 2);
@@ -105,12 +105,12 @@ bool HeroCar::heroCollides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, 
     }
     if (obstacles!=nullptr){
         for (int obno=0; obno<obstacleCount; obno++) {
-            std::cout<<obstacles[obno][0]<<"<->"<<heromidx<<" "<<obstacles[obno][1]<<"<->"<<heromidy<<std::endl;
+            //std::cout<<obstacles[obno][0]<<"<->"<<heromidx<<" "<<obstacles[obno][1]<<"<->"<<heromidy<<std::endl;
             float dist = pow((pow(heromidx-obstacles[obno][0],2) + pow(heromidy-obstacles[obno][1],2)), 2);
             if (dist <= THRESHOLD+10)
                 return true;
         }
-        std::cout<<"No obstacle collision";
+        //std::cout<<"No obstacle collision";
     }
     if (trees!=nullptr) {
         for (int treeno=0; treeno<treeCount; treeno++) {
@@ -118,7 +118,7 @@ bool HeroCar::heroCollides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, 
             if (dist <= THRESHOLD+10)
                 return true;
         }
-        std::cout<<"No tree collision";
+        //std::cout<<"No tree collision";
     }
     return false;
 }
