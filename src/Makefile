@@ -26,7 +26,7 @@ LFLAGS = -L../lib
 LIBS = -lm
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Linux)
-	LIBS += -lGL -lGLU -lglut
+	LIBS += -lGL -lGLU -lglut -lpthread
 endif
 ifeq ($(UNAME_S),Darwin)
 	LIBS +=  -framework GLUT -framework OpenGL -Wno-deprecated
