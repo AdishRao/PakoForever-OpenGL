@@ -12,12 +12,15 @@ class HeroCar
     float change_y = 0; // 0 = bottom, 1 = top
     int change_z = 0;   // 0 = near, 1 = far
     int currentdir = 0;
-
-        void drawCopCall(int);
-        void calmovement(int[8][3],int);
-        bool heroCollides(GLfloat **, GLfloat **, CopCar **, int, int, int);
-        void resetPositions();
-        void drawCarTor();
+  public:
+    GLfloat heromidx, heromidy; 
+    void drawCarCall();
+    void calmovement(int[8][3],int);
+    bool heroCollides(GLfloat **, GLfloat **, CopCar **, int, int, int);
+    void resetPositions();
+    void drawCarTor();
+    void moveForward();
+    void changeDirection(unsigned char);
 };
 
 #endif

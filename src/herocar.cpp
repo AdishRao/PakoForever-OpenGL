@@ -10,7 +10,6 @@ void HeroCar::drawCarTor()
     glRotatef(45,1,0,0);
     glutSolidTorus(3,9,30, 30);
     glPopMatrix();
-    
 }
 
 void HeroCar::drawCarCall()
