@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     glutCreateWindow("PAKO FOREVER!");
     glEnable(GL_DEPTH_TEST); 
     window.initialize();
-    //std::thread th1(playSong);
+    std::thread th1(playSong);
     glutDisplayFunc(Callbacks::display);
     glutIdleFunc(Callbacks::idle);
     glutSpecialFunc(Callbacks::specialKey);

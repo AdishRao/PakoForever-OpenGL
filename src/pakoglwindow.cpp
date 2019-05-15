@@ -3,7 +3,53 @@
 int flag = 1;
 auto start = std::chrono::system_clock::now();
 
-    
+GLfloat UpwardsScrollVelocity = -10.0;
+float view = 20.0;
+
+std::string quote[] = {  "Computer Graphics Mini Project", "Course 15CSL67", "PAKO FOREVER", "Aniruddha Mysore 1PE16CS019", "Adish Rao 1PE16CS006"};
+int numberOfQuotes = 5;
+
+void timeTick(void)
+{
+	if (UpwardsScrollVelocity < -400)
+		view -= 0.000001;
+	if (view < 0)
+	{
+		view = 20;
+		UpwardsScrollVelocity = -10.0;
+	}
+	//	exit(0);
+	UpwardsScrollVelocity -= 0.015;
+    std::cout<<UpwardsScrollVelocity<<std::endl;
+	glutPostRedisplay();
+}
+
+
+void starWars()
+{
+    glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	//gluLookAt(0.0, 30.0, 100.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+	
+	int l, lenghOfQuote, i;
+
+	glTranslatef(0.0, 100, UpwardsScrollVelocity);
+	glRotatef(-20, 1.0, 0.0, 0.0);
+	glScalef(0.1, 0.1, 0.1);
+
+	for (l = 0; l < numberOfQuotes; l++)
+	{
+		lenghOfQuote = quote[l].length();
+		glPushMatrix();
+		glTranslatef(-(lenghOfQuote * 37)+1000, -(l * 200), 0.0);
+		for (i = 0; i < lenghOfQuote; i++)
+		{
+			glColor3f((UpwardsScrollVelocity / 10) + 300 + (l * 10), (UpwardsScrollVelocity / 10) + 300 + (l * 10), 0.0);
+			glutStrokeCharacter(GLUT_STROKE_ROMAN, quote[l][i]);
+		}
+		glPopMatrix();
+	}
+}
 
 void PakoGLWindow::keypressed(unsigned char key, int x, int y)
 {
@@ -207,6 +253,7 @@ void PakoGLWindow::idle() {
     if ( currentScreen == gamescreen ){
         glutPostRedisplay();
     }
+    //timeTick();
 }
 
 void PakoGLWindow::startScreen()
@@ -214,6 +261,7 @@ void PakoGLWindow::startScreen()
     glClearColor(0,0,0,0);
     glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Pako Forever!");
     glText(180,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to continue");
+    //starWars();
 }
 
 void PakoGLWindow::gameOverScreen()
