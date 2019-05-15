@@ -13,10 +13,10 @@ class CopCar {
         GLfloat destx, desty; // Location to move the car to
         CopCar(int);
         void calMovement();
-        void drawCar(int,int,int,int);
+        void drawCar();
         void drawCarCall(GLfloat,GLfloat);
         void changeColor(); 
-        void resetPositions();
+        void resetPositions(bool);
         bool collides(GLfloat **, GLfloat **, CopCar **, int, int, int);
 
 };

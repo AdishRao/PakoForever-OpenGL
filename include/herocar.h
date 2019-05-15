@@ -19,10 +19,10 @@ class HeroCar {
         void changeDirection(unsigned char);
 
         void drawCopCall(int);
-        void drawCop(int,int,int,int,int);
         void calmovement(int[8][3],int);
         bool heroCollides(GLfloat **, GLfloat **, CopCar **, int, int, int);
         void resetPositions();
+        void drawCarTor();
 };
 
 #endif
