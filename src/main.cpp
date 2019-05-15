@@ -18,7 +18,7 @@ void playSong(){
 int main(int argc, char **argv)
 {
     glutInit(&argc,argv);
-    glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB|GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB|GLUT_DEPTH);
     glutInitWindowPosition(0,0);
     glutInitWindowSize(1000,700);
     glutCreateWindow("PAKO FOREVER!");

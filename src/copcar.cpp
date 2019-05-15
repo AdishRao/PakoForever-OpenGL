@@ -9,7 +9,8 @@ const int copBounds[10][8][3]={
 };
 
 const float copMid[10][2]={{25+20,100+20},{95+20,10+20},{405+20,405+20},{205+20,305+20},{405+20,45+20}};
-float copSpeed[10]={0.2,0.2,0.2,0.3,0.3};
+float copSpeed[10]={0.5,0.5,0.6,0.6,0.8};
+float icopSpeed[10]={0.5,0.5,0.6,0.6,0.8};
 
 CopCar::CopCar(int carno)
 {
@@ -37,15 +38,14 @@ void CopCar::calMovement()
     }
 }
 
-void CopCar::drawCar(int a,int b,int c,int d)
+void CopCar::drawCar()
 {
     calMovement();
-    glBegin(GL_POLYGON);
-        glVertex3iv(copBounds[carno][a]);
-        glVertex3iv(copBounds[carno][b]);
-        glVertex3iv(copBounds[carno][c]);
-        glVertex3iv(copBounds[carno][d]);
-    glEnd();
+    glPushMatrix();
+    glTranslatef( mid[0],mid[1],0);
+    glRotatef(45,1,0,0);
+    glutSolidTorus(3,9,30, 30);
+    glPopMatrix();
 }
 
 
@@ -53,38 +53,33 @@ void CopCar::drawCarCall(GLfloat destx, GLfloat desty)
 {   
     this->destx = destx;
     this->desty = desty;
-    copSpeed[0]+=0.00003;
-    copSpeed[1]+=0.00001;
-    copSpeed[2]+=0.00002;
-    copSpeed[3]+=0.00005;
-    copSpeed[4]+=0.000033;
-    colors::colorNames primary = (colorMode<3)?colors::RED:colors::BLUE;
-    colors::colorNames secondary = (colorMode<3)?colors::BLUE:colors::RED;
+    if(copSpeed[0]<1.1)
+        copSpeed[0]+=0.003;
+    if(copSpeed[1]<1.1)
+        copSpeed[1]+=0.001;
+    if(copSpeed[2]<1.1)
+        copSpeed[2]+=0.002;
+    if(copSpeed[3]<1.1)
+        copSpeed[3]+=0.005;
+    if(copSpeed[4]<1.1)
+        copSpeed[4]+=0.0033;
+
+    colors::colorNames primary = (colorMode<9)?colors::RED:colors::BLUE;
+    colors::colorNames secondary = (colorMode<9)?colors::BLUE:colors::RED;
     glPushMatrix();
     glLoadIdentity();
-    glTranslatef(change[0],change[1],0);
     setGlColor(primary);
-    drawCar(0,3,2,1);
-    setGlColor(primary);
-    drawCar(2,3,7,6);
-    setGlColor(primary);
-    drawCar(0,4,7,3);
-    setGlColor(primary);
-    drawCar(1,2,6,5);
-    setGlColor(secondary);
-    drawCar(4,5,6,7);
-    setGlColor(primary);
-    drawCar(0,1,5,4);
+    drawCar();
     glPopMatrix();
 }
 
 void CopCar::changeColor() {
-    colorMode = (colorMode + 1)%4;
+    colorMode = (colorMode + 1)%11;
 }
 
 bool CopCar::collides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, int obstacleCount, int treeCount, int copCount) 
 {
-    const int THRESHOLD = 5;
+    const int THRESHOLD = 15;
     const GLfloat midx = mid[0], midy = mid[1];
     for (int carno=0; carno<copCount; carno++) {
         if (carno == this->carno) continue;
@@ -113,7 +108,8 @@ bool CopCar::collides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, int o
 }
 
 
-void CopCar::resetPositions() { 
+void CopCar::resetPositions(bool resetSpeed = false) { 
     change[0] = change[1] = change[2] = 0;
+    if (resetSpeed) copSpeed[carno]=icopSpeed[carno];
     calMovement();
 }

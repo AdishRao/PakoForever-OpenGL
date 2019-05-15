@@ -37,5 +37,4 @@ void setGlColor(colors::colorNames);
 
 void glText(float x, float y, float r, float g, float b, void* font, std::string string);
 
-
 #endif

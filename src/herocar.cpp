@@ -1,46 +1,22 @@
 #include "../include/herocar.h"
 
 int i = 0;
-const float HEROSPEED = 0.9;
-void HeroCar::drawCar(int a,int b,int c,int d)
+const float HEROSPEED = 1.2;
+
+void HeroCar::drawCarTor()
 {
-    glBegin(GL_POLYGON);
-        glVertex3iv(currentpos[a]);
-        glVertex3iv(currentpos[b]);
-        glVertex3iv(currentpos[c]);
-        glVertex3iv(currentpos[d]);
-    glEnd();
+    glPushMatrix();
+    glTranslatef(heromidx, heromidy, 0);
+    glRotatef(45,1,0,0);
+    glutSolidTorus(3,9,30, 30);
+    glPopMatrix();
+    
 }
 
 void HeroCar::drawCarCall()
 {
-    setGlColor(colors::RED);
-    drawCar(0,3,2,1);
-    if(currentdir==2)
-    setGlColor(colors::WHITE);
-    else
     setGlColor(colors::CYAN);
-    drawCar(2,3,7,6);
-    if(currentdir==1)
-    setGlColor(colors::WHITE);
-    else
-    setGlColor(colors::CYAN);
-    drawCar(0,4,7,3);
-    
-    if (currentdir==0)
-    setGlColor(colors::WHITE);
-    else 
-    setGlColor(colors::CYAN);
-    drawCar(1,2,6,5);
-
-    setGlColor(colors::YELLOW);
-    drawCar(4,5,6,7);
-
-    if(currentdir == 3)
-    setGlColor(colors::WHITE);
-    else
-    setGlColor(colors::CYAN);
-    drawCar(0,1,5,4);
+    drawCarTor();
 }
 
 void HeroCar::changeDirection(unsigned char key) { 
@@ -63,10 +39,6 @@ void HeroCar::changeDirection(unsigned char key) {
 void HeroCar::moveForward()
 {
     setGlColor(colors::WHITE);
-    glPointSize(5);
-    glBegin(GL_POINTS);
-    glVertex2d(heromidx,heromidy);
-    glEnd();
     glPushMatrix(); 
     switch(currentdir)
     {
@@ -90,14 +62,14 @@ void HeroCar::moveForward()
     //std::cout<<"CHANGE"<<change_x<<" "<<change_y<<std::endl;
     heromidx = 80 + change_x;  // When you're changing this also change it in the reset posion function
     heromidy = 80 + change_y;
-    glTranslatef(change_x,change_y,0);
+    //glTranslatef(change_x,change_y,0);
     drawCarCall();
     glPopMatrix();
 }
 
 bool HeroCar::heroCollides(GLfloat **obstacles, GLfloat **trees, CopCar** cops, int obstacleCount, int treeCount, int copCount) 
 {
-    const int THRESHOLD = 5;
+    const int THRESHOLD = 45;
     if ( heromidx < 0 || heromidx >= 500 || heromidy <0 || heromidy >= 500) { 
         return true;
     }

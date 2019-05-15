@@ -103,7 +103,7 @@ void PakoGLWindow::specialKey(int key, int x, int y)
 void PakoGLWindow::drawObstacles(double radius, colors::colorNames color) 
 {
     // initialize random seed - otherwise random positions generated each time when display calls. 
-    srand (33);
+    srand (36);
     // generates M sided polygon
     const int sides=9;
     // defining bounds for ortho
@@ -119,12 +119,6 @@ void PakoGLWindow::drawObstacles(double radius, colors::colorNames color)
         obstacles[i] = new GLfloat[2];
         obstacles[i][0] = xCenter;
         obstacles[i][1] = yCenter;
-        glPointSize(8);
-        setGlColor(colors::YELLOW);
-        glBegin(GL_POINTS);
-        glVertex2f(xCenter,yCenter);
-        glEnd();
-
         glBegin(GL_POLYGON);
         for(int i=0;i<=sides;i++)
         {
@@ -139,7 +133,7 @@ void PakoGLWindow::drawObstacles(double radius, colors::colorNames color)
 
 void PakoGLWindow::drawTree(colors::colorNames color) {
     // initialize random seed - otherwise random positions generated each time when display calls. 
-    srand (30);
+    srand (20);
     // defining bounds for ortho
     const int xMin=0, xMax=500, yMin=0, yMax=500;
     trees = new GLfloat*[treeCount];
@@ -187,12 +181,12 @@ void PakoGLWindow::initialize()
 {
     currentScreen = startgame;
     obstacleCount = 50;
-    treeCount = 20;
+    treeCount = 25;
     copCount = 5;
     cops = new CopCar*[copCount];
     for (int i=0; i<copCount; i++) { 
         cops[i] = new CopCar(i);
-        cops[i]->resetPositions();
+        cops[i]->resetPositions(true);
     }
 
     glMatrixMode(GL_PROJECTION);
@@ -213,22 +207,18 @@ void PakoGLWindow::display()
                 if ( car.heroCollides(obstacles,trees,cops,obstacleCount,treeCount,copCount) ) {
                     car.resetPositions();
                     for (int i=0; i<copCount; i++) { 
-                        cops[i]->resetPositions();
-                    }
-                    for(int i=0;i<1000000;i++)
-                    {
-                        glClearColor(0,0,0,0);
-                        glClearColor(1,1,1,1);
-                    }
+                        cops[i]->resetPositions(true);
+    
                     currentScreen = gameover;
                     glutPostRedisplay();
+                    }
                 }
-                else { 
+                else
+                { 
                     car.moveForward();
-
                     for (int i=0; i<copCount; i++) {
                         if ( cops[i]->collides(obstacles,trees,cops,obstacleCount,treeCount,copCount) ) { 
-                            cops[i]->resetPositions();
+                            cops[i]->resetPositions(false);
                         }
                         cops[i]->changeColor();
                         cops[i]->drawCarCall(car.heromidx, car.heromidy);
@@ -244,10 +234,11 @@ void PakoGLWindow::display()
         case gameover:
             std::cout<<"gameover";
             gameOverScreen();
-    }
-    glFlush();
-    glutSwapBuffers();
+        }
+        glFlush();
+        glutSwapBuffers();
 }
+
 
 void PakoGLWindow::idle() { 
     if ( currentScreen == gamescreen ){
@@ -262,6 +253,8 @@ void PakoGLWindow::startScreen()
     glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Pako Forever!");
     glText(180,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to continue");
     //starWars();
+    glText(180,150,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Adish Rao:        \t\t1PE16CS006");
+    glText(180,130,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Aniruddha Mysore: 1PE16CS019");
 }
 
 void PakoGLWindow::gameOverScreen()
