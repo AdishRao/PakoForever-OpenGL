@@ -73,12 +73,6 @@ void PakoGLWindow::drawObstacles(double radius, colors::colorNames color)
         obstacles[i] = new GLfloat[2];
         obstacles[i][0] = xCenter;
         obstacles[i][1] = yCenter;
-        //glPointSize(8);
-        //setGlColor(colors::YELLOW);
-        //glBegin(GL_POINTS);
-        //glVertex2f(xCenter,yCenter);
-        //glEnd();
-
         glBegin(GL_POLYGON);
         for(int i=0;i<=sides;i++)
         {

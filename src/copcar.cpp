@@ -54,15 +54,15 @@ void CopCar::drawCarCall(GLfloat destx, GLfloat desty)
     this->destx = destx;
     this->desty = desty;
     if(copSpeed[0]<1.1)
-        copSpeed[0]+=0.0003;
-    if(copSpeed[1]<1)
-        copSpeed[1]+=0.0001;
-    if(copSpeed[2]<1)
-        copSpeed[2]+=0.0002;
-    if(copSpeed[3]<1)
-        copSpeed[3]+=0.0005;
-    if(copSpeed[4]<1)
-        copSpeed[4]+=0.00033;
+        copSpeed[0]+=0.003;
+    if(copSpeed[1]<1.1)
+        copSpeed[1]+=0.001;
+    if(copSpeed[2]<1.1)
+        copSpeed[2]+=0.002;
+    if(copSpeed[3]<1.1)
+        copSpeed[3]+=0.005;
+    if(copSpeed[4]<1.1)
+        copSpeed[4]+=0.0033;
 
     colors::colorNames primary = (colorMode<9)?colors::RED:colors::BLUE;
     colors::colorNames secondary = (colorMode<9)?colors::BLUE:colors::RED;
