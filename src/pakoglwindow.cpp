@@ -249,12 +249,15 @@ void PakoGLWindow::idle() {
 
 void PakoGLWindow::startScreen()
 {
-    glClearColor(0,0,0,0);
+    glClearColor(0.3,0.2,0.2,0);
+    glText(160,400,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Computer Graphics Mini Project");
     glText(200,250,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Pako Forever!");
-    glText(180,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to continue");
+    glText(170,230,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Press any key to start game");
     //starWars();
-    glText(180,150,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Adish Rao:        \t\t1PE16CS006");
-    glText(180,130,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Aniruddha Mysore: 1PE16CS019");
+    glText(150,150,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Adish Rao");
+    glText(150,130,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "Aniruddha Mysore");
+    glText(270,150,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "1PE16CS006");
+    glText(270,130,1,1,1,GLUT_BITMAP_TIMES_ROMAN_24, "1PE16CS019");
 }
 
 void PakoGLWindow::gameOverScreen()
